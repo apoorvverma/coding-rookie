@@ -435,18 +435,21 @@
       <a href="#cleaning">Cleaning</a>
       <a href="#findings">Findings</a>
       <a href="#features">Features</a>
-      <a href="#recommendations">Takeaways</a>
+      <a href="#modeling" style="color: #5b8def; font-weight:bold; font-style:italic; font-size:0.85rem;">Models</a>
+      <a href="#business" style="color: #5b8def; font-weight:bold; font-style:italic; font-size:0.85rem;">Business</a>
+      <a href="#recommendations" style="color: #21e45b; font-weight:bold; font-style:italic; font-size:0.85rem;">Takeaways</a>
     </div>
   </div>
 </nav>
 
 <!-- ═══════════════════════════ HERO ══════════════════════════ -->
 <header class="hero">
-  <div class="badge fade-in">Data Hackathon 2026</div>
+  <div class="badge fade-in">Data Hackathon 2025</div>
   <h1 class="fade-in delay-1">Now or Later?<br/>Decoding <em>Intertemporal Choice</em></h1>
   <p class="subtitle fade-in delay-2">
     A large-scale analysis of when and why people choose smaller-sooner rewards
-    over larger-later ones — and what drives that decision.
+    over larger-later ones — with predictive models and actionable recommendations
+    for streaming subscription tier optimization.
   </p>
   <div class="hero-stats fade-in delay-3">
     <div class="stat">
@@ -462,8 +465,8 @@
       <span class="stat-label">Tipping ratio</span>
     </div>
     <div class="stat">
-      <span class="stat-value">12</span>
-      <span class="stat-label">Features ranked</span>
+      <span class="stat-value">3</span>
+      <span class="stat-label">Predictive models</span>
     </div>
   </div>
 </header>
@@ -818,9 +821,234 @@
   </div>
 </section>
 
+<!-- ═══════════════════ PREDICTIVE MODELING ═══════════════════ -->
+<section id="modeling">
+  <div class="section-label">05 — Predictive Modeling</div>
+  <h2>Can We Predict Who Waits?</h2>
+  <p>
+    We trained three classifiers to predict SS (0) vs LL (1) choice using task-level features,
+    behavioral signals, and contextual variables. Data was split 80/20 with stratified sampling,
+    subsampled to 300k rows for training efficiency (seed = 42).
+  </p>
+
+  <div class="metrics-row">
+    <div class="metric-card">
+      <div class="metric-val">3</div>
+      <div class="metric-label">Models compared</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val" style="color: var(--clr-accent);">17</div>
+      <div class="metric-label">Input features</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val" style="color: var(--clr-accent-2);">80 / 20</div>
+      <div class="metric-label">Train / Test split</div>
+    </div>
+  </div>
+
+  <h3>Why These Three Models?</h3>
+  <p>
+    <strong>Logistic Regression</strong> — our interpretability anchor. Signed coefficients tell us
+    the direction and magnitude of each feature's effect. A positive coefficient for reward_ratio
+    means higher ratios push toward LL (patience). This is what we use for business recommendations.
+  </p>
+  <p>
+    <strong>Random Forest</strong> — captures non-linear interactions (e.g., how age modifies the
+    effect of reward ratio) without manual feature crossing. Feature importances confirm or challenge
+    the MI ranking from our EDA.
+  </p>
+  <p>
+    <strong>XGBoost</strong> — our performance ceiling. Gradient boosting typically achieves the
+    highest accuracy on tabular data, giving us a benchmark for how much signal exists in the features.
+  </p>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">Model Accuracy &amp; AUC-ROC Comparison</span>
+      <span class="chart-tag">Model</span>
+    </div>
+    <div class="chart-body">
+      <!-- 🔄 REPLACE: <img src="images/plot_model_comparison.png" alt="Model comparison" /> -->
+      <img src="images/plot_model_comparison.png" alt="Model comparison" />
+      <!-- <div class="chart-placeholder">
+        <span>📊</span>
+        <span>Drop your exported chart here</span>
+        <code>images/plot_model_comparison.png</code>
+      </div> -->
+    </div>
+    <div class="chart-caption">
+      All three models substantially outperform the ~50% baseline. XGBoost leads on raw metrics,
+      but Logistic Regression offers the best interpretability-to-performance trade-off.
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">ROC Curves</span>
+      <span class="chart-tag">Model</span>
+    </div>
+    <div class="chart-body">
+      <!-- 🔄 REPLACE: <img src="images/plot_roc_curves.png" alt="ROC curves" /> -->
+      <img src="images/plot_roc_curves.png" alt="ROC curves" />
+      <!-- <div class="chart-placeholder">
+        <span>📈</span>
+        <span>Drop your exported chart here</span>
+        <code>images/plot_roc_curves.png</code>
+      </div> -->
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">Confusion Matrices</span>
+      <span class="chart-tag">Model</span>
+    </div>
+    <div class="chart-body">
+      <!-- 🔄 REPLACE: <img src="images/plot_confusion_matrices.png" alt="Confusion matrices" /> -->
+      <img src="images/plot_confusion_matrices.png" alt="Confusion matrices" />
+      <!-- <div class="chart-placeholder">
+        <span>🔢</span>
+        <span>Drop your exported chart here</span>
+        <code>images/plot_confusion_matrices.png</code>
+      </div> -->
+    </div>
+  </div>
+
+  <h3>What Drives Predictions?</h3>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">Feature Importance Across Models</span>
+      <span class="chart-tag">Model</span>
+    </div>
+    <div class="chart-body">
+      <!-- 🔄 REPLACE: <img src="images/plot_feature_importance.png" alt="Feature importance" /> -->
+      <img src="images/plot_feature_importance.png" alt="Feature importance" />
+      <!-- <div class="chart-placeholder">
+        <span>🏆</span>
+        <span>Drop your exported chart here</span>
+        <code>images/plot_feature_importance.png</code>
+      </div> -->
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">Logistic Regression Coefficients (Signed)</span>
+      <span class="chart-tag">Interpretability</span>
+    </div>
+    <div class="chart-body">
+      <!-- 🔄 REPLACE: <img src="images/plot_lr_coefficients.png" alt="LR coefficients" /> -->
+      <img src="images/plot_lr_coefficients.png" alt="LR coefficients" />
+      <!-- <div class="chart-placeholder">
+        <span>⚖️</span>
+        <span>Drop your exported chart here</span>
+        <code>images/plot_lr_coefficients.png</code>
+      </div> -->
+    </div>
+    <div class="chart-caption">
+      Green bars (positive) push toward LL / patience. Red bars (negative) push toward SS / impatience.
+      Reward ratio is the strongest positive predictor — confirming our EDA tipping-point finding.
+    </div>
+  </div>
+
+  <div class="insight">
+    <strong>Model selection rationale:</strong> We prioritize Logistic Regression for business
+    recommendations because its coefficients are directly interpretable as effect sizes. The RF and
+    XGBoost models confirm that additional non-linear signal exists but adds only modest accuracy gains
+    — validating that the key relationships are approximately linear in this domain.
+  </div>
+</section>
+
+<!-- ═══════════════════ BUSINESS APPLICATION ══════════════════ -->
+<section id="business">
+  <div class="section-label">06 — Business Application</div>
+  <h2>Streaming Subscription Tier Optimization</h2>
+  <p>
+    Our intertemporal choice models map directly to the streaming platform decision:
+    <strong>SS (free/ad-supported tier)</strong> = immediate gratification at lower value, vs.
+    <strong>LL (premium tier)</strong> = delayed payoff with higher long-term experience quality.
+  </p>
+
+  <div class="insight insight-warm">
+    <strong>Core question:</strong> When will a user choose the premium tier (higher cost, better
+    long-term experience) over the free tier (instant access, ad-interrupted)? Our models answer this
+    with quantified thresholds and segment-level predictions.
+  </div>
+
+  <h3>From Behavioral Science to Platform Strategy</h3>
+
+  <div class="rec-grid">
+    <div class="rec-card">
+      <div class="rec-icon">💰</div>
+      <div class="rec-title">Pricing the Premium Tier</div>
+      <div class="rec-desc">
+        Our 1.29× tipping point means: if the free tier delivers ~$10/month in perceived utility,
+        the premium must deliver at least ~$12.90. Pricing below this ratio will result in majority
+        free-tier retention.
+      </div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-icon">🎯</div>
+      <div class="rec-title">Predicting Convertible Users</div>
+      <div class="rec-desc">
+        Our model predicts LL-tendency (premium-readiness) per user profile. Focus marketing spend
+        on users whose behavioral signals predict patience — they convert and retain at higher rates.
+      </div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-icon">📣</div>
+      <div class="rec-title">Upgrade Prompt Design</div>
+      <div class="rec-desc">
+        Procedure type drives ~30pp variation in patience. A/B test HOW the upgrade is presented
+        (value framing vs. loss aversion vs. social proof) before segmenting by demographics.
+      </div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-icon">📱</div>
+      <div class="rec-title">Channel-Specific Strategy</div>
+      <div class="rec-desc">
+        Online/mobile users trend ~8pp more impatient. Mobile upgrade prompts need a stronger
+        value pitch; emphasize immediate benefits ("start watching ad-free tonight").
+      </div>
+    </div>
+  </div>
+
+  <h3>Customer Lifetime Value Segmentation</h3>
+  <p>
+    Our model outputs enable a two-track CLV strategy based on predicted patience profiles:
+  </p>
+
+  <div class="pipeline">
+    <div class="pipeline-step">
+      <div class="step-num">Predicted LL</div>
+      <div class="step-title">High-Patience Segment</div>
+      <div class="step-desc">
+        Higher expected retention. Target with annual plans and long-term value messaging.
+        Lower churn risk — invest in relationship depth.
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">Predicted SS</div>
+      <div class="step-title">Impatience Segment</div>
+      <div class="step-desc">
+        Target with trial offers and month-to-month flexibility. Emphasize instant benefits.
+        Monitor churn triggers and intervene with retention offers.
+      </div>
+    </div>
+  </div>
+
+  <div class="insight insight-blue">
+    <strong>Key insight from LR coefficients:</strong> The reward_ratio coefficient is the strongest
+    positive predictor of LL choice. Translating to streaming: for every 10% increase in the premium
+    tier's perceived value proposition, the probability of choosing the long-term subscription increases
+    meaningfully — quantifiable from the model's coefficient directly.
+  </div>
+</section>
+
 <!-- ═══════════════════ RECOMMENDATIONS ═══════════════════════ -->
 <section id="recommendations">
-  <div class="section-label">05 — Recommendations</div>
+  <div class="section-label">07 — Recommendations</div>
   <h2>Actionable Takeaways</h2>
 
   <div class="rec-grid">
