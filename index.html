@@ -42,6 +42,7 @@
       color: var(--clr-text);
       background: var(--clr-bg);
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
     /* ── NAV ─────────────────────────────────────────── */
@@ -79,6 +80,28 @@
       transition: color 0.2s;
     }
     nav .nav-links a:hover { color: var(--clr-heading); }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      flex-direction: column;
+      gap: 5px;
+      z-index: 110;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--clr-text-muted);
+      border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .nav-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.active span:nth-child(2) { opacity: 0; }
+    .nav-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
     /* ── HERO ────────────────────────────────────────── */
     .hero {
@@ -414,13 +437,100 @@
     .delay-3 { animation-delay: 0.3s; }
     .delay-4 { animation-delay: 0.4s; }
 
-    /* ── RESPONSIVE ──────────────────────────────────── */
-    @media (max-width: 640px) {
-      .hero { padding: 4rem 1.2rem 2.5rem; }
-      section { padding: 2.5rem 1.2rem; }
-      .hero-stats { gap: 1.5rem; }
-      nav .nav-links { gap: 1rem; }
-      nav .nav-links a { font-size: 0.75rem; }
+    /* ── RESPONSIVE — TABLET ─────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-toggle { display: flex; }
+
+      nav .nav-inner { padding: 0 1.2rem; }
+
+      nav .nav-links {
+        display: none;
+        position: absolute;
+        top: 56px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: rgba(12, 15, 20, 0.96);
+        backdrop-filter: blur(18px);
+        border-bottom: 1px solid var(--clr-border);
+        padding: 0.8rem 1.4rem 1.2rem;
+        gap: 0;
+      }
+      nav .nav-links.open { display: flex; }
+
+      nav .nav-links a {
+        display: block;
+        padding: 0.65rem 0;
+        font-size: 0.9rem;
+        border-bottom: 1px solid var(--clr-border);
+      }
+      nav .nav-links a:last-child { border-bottom: none; }
+
+      .hero { padding: 4rem 1.4rem 3rem; }
+      section { padding: 3rem 1.4rem; }
+
+      .hero-stats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.2rem;
+      }
+
+      .chart-card .chart-body { padding: 1rem; min-height: 200px; }
+      .chart-card .chart-header { padding: 0.8rem 1rem; }
+      .chart-card .chart-caption { padding: 0.7rem 1rem; }
+
+      .insight { padding: 1rem 1.2rem; }
+
+      .pipeline { grid-template-columns: repeat(2, 1fr); }
+
+      .rec-grid { grid-template-columns: 1fr; }
+
+      footer {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.5rem 1.4rem 2rem;
+      }
+    }
+
+    /* ── RESPONSIVE — PHONE ──────────────────────────── */
+    @media (max-width: 480px) {
+      .hero { padding: 3rem 1rem 2rem; }
+      section { padding: 2rem 1rem; }
+
+      .hero h1 { font-size: 1.7rem; }
+
+      .hero .subtitle { font-size: 0.95rem; margin-bottom: 1.8rem; }
+
+      .hero-stats { gap: 1rem; }
+      .hero-stats .stat-value { font-size: 1.25rem; }
+      .hero-stats .stat-label { font-size: 0.7rem; }
+
+      h2 { font-size: 1.4rem; }
+      h3 { font-size: 0.95rem; margin-top: 2rem; }
+
+      .chart-card .chart-body {
+        padding: 0.6rem;
+        min-height: 160px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .chart-card .chart-body img { min-width: 300px; }
+
+      .chart-card .chart-title { font-size: 0.8rem; }
+
+      .pipeline { grid-template-columns: 1fr; }
+
+      .metrics-row { grid-template-columns: 1fr; }
+      .metric-card .metric-val { font-size: 1.3rem; }
+
+      .insight { font-size: 0.85rem; padding: 0.9rem 1rem; margin: 1rem 0 1.5rem; }
+
+      .rec-card { padding: 1.1rem; }
+      .rec-card .rec-title { font-size: 0.88rem; }
+      .rec-card .rec-desc { font-size: 0.8rem; }
+
+      footer .footer-left,
+      footer .footer-right { font-size: 0.72rem; }
     }
   </style>
 </head>
@@ -430,6 +540,9 @@
 <nav>
   <div class="nav-inner">
     <div class="nav-logo">Team Coding Rookie</div>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
     <div class="nav-links">
       <a href="#overview">Overview</a>
       <a href="#cleaning">Cleaning</a>
@@ -1099,6 +1212,26 @@
   <div class="footer-left">© 2026 Team Coding Rookie - Data Hackathon</div>
   <div class="footer-right">Built with Python · pandas · seaborn · sklearn</div>
 </footer>
+
+<!-- Mobile nav toggle -->
+<script>
+  const toggle = document.querySelector('.nav-toggle');
+  const navLinks = document.querySelector('.nav-links');
+
+  toggle.addEventListener('click', () => {
+    const expanded = toggle.classList.toggle('active');
+    navLinks.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', expanded);
+  });
+
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      toggle.classList.remove('active');
+      navLinks.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+</script>
 
 <!-- Scroll-triggered fade-in for sections -->
 <script>
