@@ -1,8 +1,27 @@
 # 🧠 Team Coding Rookie - Intertemporal Choice Analysis
 
-> **Data Hackathon 2026** — Analyzing when and why people choose smaller-sooner vs. larger-later rewards across 800k+ trials, and building predictive models to inform streaming subscription tier strategy.
+<table>
+<tr>
+<td>
 
-🔗 **[View our findings →](https://apoorvverma.github.io/coding-rookie/)**
+### 🏆 1st Place in Data Hackathon Spring 2026
+
+We competed against teams from different backgrounds and took home the **winning title**.
+
+<sub><a href="https://apoorvverma.github.io/coding-rookie/">View the full presentation here!</a></sub>
+
+</td>
+</tr>
+<tr>
+<td>
+<img src="images/hackathon-winners.png" alt="Hackathon winners - Team Coding Rookie" width="100%" />
+</td>
+</tr>
+</table>
+
+---
+
+> Analyzing when and why people choose smaller-sooner vs. larger-later rewards across 800k+ trials, and building predictive models to inform streaming subscription tier strategy.
 
 ---
 
